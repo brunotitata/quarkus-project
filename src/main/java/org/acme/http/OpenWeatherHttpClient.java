@@ -1,4 +1,4 @@
-package org.acme.service;
+package org.acme.http;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

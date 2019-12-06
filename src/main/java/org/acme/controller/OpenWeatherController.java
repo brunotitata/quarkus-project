@@ -6,7 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.acme.Model.OpenWeatherResource;
-import org.acme.service.OpenWeatherHttpClient;
+import org.acme.http.OpenWeatherHttpClient;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
