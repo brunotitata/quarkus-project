@@ -1,27 +1,36 @@
 package org.acme.controller;
 
-import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.acme.Model.OpenWeatherResource;
-import org.acme.service.OpenWeatherService;
+import org.acme.service.OpenWeatherHttpClient;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 @Path("/api")
 public class OpenWeatherController {
 
-    @Inject
+    @ConfigProperty(name = "token.appid")
+    String appid;
+
     @RestClient
-    OpenWeatherService openWeatherService;
+    OpenWeatherHttpClient openWeatherService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public OpenWeatherResource name(@QueryParam("city") String city, @QueryParam("appid") String key) {
-        return openWeatherService.getByName(city, key);
+    public OpenWeatherResource name(@QueryParam("city") String city) {
+        return openWeatherService.getByName(city, appid);
+    }
+
+    @GET
+    @Path("/coordenadas")
+    @Produces(MediaType.APPLICATION_JSON)
+    public OpenWeatherResource lat(@QueryParam("latitude") String latitude, @QueryParam("longitude") String longitude) {
+        return openWeatherService.getCityByLatAndLon(latitude, longitude, appid);
     }
 
 }
