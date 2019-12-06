@@ -20,9 +20,8 @@ public class OpenWeatherController {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public OpenWeatherResource name(@QueryParam("city") String city) {
-
-        return openWeatherService.getByName(city);
+    public OpenWeatherResource name(@QueryParam("city") String city, @QueryParam("appid") String key) {
+        return openWeatherService.getByName(city, key);
     }
 
 }
