@@ -1,4 +1,4 @@
-package org.acme.Model;
+package org.acme.model;
 
 import java.util.List;
 
