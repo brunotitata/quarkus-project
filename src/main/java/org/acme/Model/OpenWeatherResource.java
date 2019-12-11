@@ -2,34 +2,20 @@ package org.acme.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class OpenWeatherResource {
 
-	@JsonIgnore
 	private Coord coord;
-	@JsonIgnore
 	private List<Weather> weather;
-	@JsonIgnore
 	private String base;
 	private Main main;
-	@JsonIgnore
 	private int visibility;
-	@JsonIgnore
 	private Wind wind;
-	@JsonIgnore
 	private Clouds clouds;
-	@JsonIgnore
 	private int dt;
-	@JsonIgnore
 	private Sys sys;
-	@JsonIgnore
 	private int timezone;
-	@JsonIgnore
 	private int id;
-	// @JsonIgnore
 	private String name;
-	@JsonIgnore
 	private int cod;
 
 	public OpenWeatherResource() {

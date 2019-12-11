@@ -3,24 +3,25 @@ package org.acme.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;
 
 import org.acme.http.MunicipioHttpClient;
 import org.acme.model.MunicipioEntity;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.springframework.stereotype.Service;
 
-@Service
+@ApplicationScoped
 public class MunicipioService {
 
     @RestClient
-    private MunicipioHttpClient municipioHttpClient;
+    MunicipioHttpClient municipioHttpClient;
     private OpenWeatherService openWeatherService;
 
     public MunicipioService(OpenWeatherService openWeatherService) {
         this.openWeatherService = openWeatherService;
     }
 
+    @Transactional
     public void salvarMunicipios() {
         municipioHttpClient.buscarTodosMunicipios()
                 .forEach(municipio -> MunicipioEntity.persist(new MunicipioEntity(municipio.getNome(),
@@ -30,6 +31,7 @@ public class MunicipioService {
                         LocalDateTime.now())));
     }
 
+    @Transactional
     public List<MunicipioEntity> listarTodosMunicipiosSalvo() {
         return MunicipioEntity.findAll().list();
     }

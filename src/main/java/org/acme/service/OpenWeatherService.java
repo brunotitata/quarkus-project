@@ -1,16 +1,17 @@
 package org.acme.service;
 
+import javax.enterprise.context.ApplicationScoped;
+
 import org.acme.http.OpenWeatherHttpClient;
 import org.acme.model.OpenWeatherResource;
 import org.acme.model.Recommendation;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
+@ApplicationScoped
 public class OpenWeatherService {
 
-    @Value("${token.appid}")
+    @ConfigProperty(name = "token.appid")
     String token;
 
     @RestClient
