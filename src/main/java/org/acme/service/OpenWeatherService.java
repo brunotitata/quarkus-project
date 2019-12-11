@@ -23,11 +23,7 @@ public class OpenWeatherService {
     }
 
     public OpenWeatherResource getCityByName(String name) {
-        OpenWeatherResource cidade = openWeatherHttpClient.getByName(name, token);
-
-        if (cidade == null)
-            return new OpenWeatherResource();
-        return cidade;
+        return openWeatherHttpClient.getByName(name, token);
     }
 
     public Recommendation suggestRecommendation(String lat, String lon) {
