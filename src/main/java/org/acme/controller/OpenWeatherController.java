@@ -20,13 +20,36 @@ public class OpenWeatherController {
     MunicipioHttpClient municipioHttpClient;
 
     public OpenWeatherController(OpenWeatherService openWeatherService) {
-        this.openWeatherService = openWeatherService;
+	this.openWeatherService = openWeatherService;
+    }
+
+    @GET
+    @Path("/sugestao")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sugestaoPorLatELong(@QueryParam("latitude") String latitude,
+	    @QueryParam("longitude") String longitude) {
+	return Response.ok(openWeatherService.suggestRecommendation(latitude, longitude)).build();
+    }
+
+    @GET
+    @Path("/sugestao")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response sugestaoPorCidade(@QueryParam("cidade") String nome) {
+	return Response.ok(openWeatherService.suggestRecommendation(nome)).build();
+    }
+
+    @GET
+    @Path("/cidade")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response buscarPorNomeCidade(@QueryParam("nome") String nome) {
+	return Response.ok(openWeatherService.getCity(nome)).build();
     }
 
     @GET
     @Path("/coordenadas")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response lat(@QueryParam("latitude") String latitude, @QueryParam("longitude") String longitude) {
-        return Response.ok(openWeatherService.suggestRecommendation(latitude, longitude)).build();
+    public Response buscarCidadePorLatELon(@QueryParam("latitude") String latitude,
+	    @QueryParam("longitude") String longitude) {
+	return Response.ok(openWeatherService.getCity(latitude, longitude)).build();
     }
 }

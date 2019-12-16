@@ -15,61 +15,61 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 @ApplicationScoped
 public class MunicipioService {
 
-    @RestClient
-    MunicipioHttpClient municipioHttpClient;
-    private OpenWeatherService openWeatherService;
+	@RestClient
+	MunicipioHttpClient municipioHttpClient;
+	private OpenWeatherService openWeatherService;
 
-    public MunicipioService(OpenWeatherService openWeatherService) {
-	this.openWeatherService = openWeatherService;
-    }
+	public MunicipioService(OpenWeatherService openWeatherService) {
+		this.openWeatherService = openWeatherService;
+	}
 
-    @Transactional
-    public void salvarMunicipios() {
-	municipioHttpClient.buscarTodosMunicipios()
-		.forEach(municipio -> MunicipioEntity.persist(new MunicipioEntity(municipio.getNome(),
-			municipio.getMicrorregiao().getMesorregiao().getUF().getSigla(),
-			Climate.convertKelvinToCelsius(
-				openWeatherService.getCityByName(municipio.getNome()).getMain().getTemp()),
-			LocalDateTime.now())));
-    }
+	@Transactional
+	public void salvarMunicipios() {
+		municipioHttpClient.buscarTodosMunicipios()
+				.forEach(municipio -> MunicipioEntity.persist(new MunicipioEntity(municipio.getNome(),
+						municipio.getMicrorregiao().getMesorregiao().getUF().getSigla(),
+						Climate.convertKelvinToCelsius(
+								openWeatherService.getCity(municipio.getNome()).getMain().getTemp()),
+						LocalDateTime.now())));
+	}
 
-    @Transactional
-    public List<MunicipioEntity> listarTodosMunicipiosSalvo() {
-	return MunicipioEntity.findAll().list();
-    }
+	@Transactional
+	public List<MunicipioEntity> listarTodosMunicipiosSalvo() {
+		return MunicipioEntity.findAll().list();
+	}
 
-    @Transactional
-    public void salvarMunicipioDoEstadoDeSP() {
-	municipioHttpClient.buscarTodosMunicipios().stream()
-		.filter(uf -> "DF".equals(uf.getMicrorregiao().getMesorregiao().getUF().getSigla()))
-		.forEach(municipio -> MunicipioEntity.persist(new MunicipioEntity(municipio.getNome(),
-			municipio.getMicrorregiao().getMesorregiao().getUF().getSigla(),
-			Climate.convertKelvinToCelsius(
-				openWeatherService.getCityByName(municipio.getNome()).getMain().getTemp()),
-			LocalDateTime.now())));
-    }
+	@Transactional
+	public void salvarMunicipioDoEstadoDeSP() {
+		municipioHttpClient.buscarTodosMunicipios().stream()
+				.filter(uf -> "DF".equals(uf.getMicrorregiao().getMesorregiao().getUF().getSigla()))
+				.forEach(municipio -> MunicipioEntity.persist(new MunicipioEntity(municipio.getNome(),
+						municipio.getMicrorregiao().getMesorregiao().getUF().getSigla(),
+						Climate.convertKelvinToCelsius(
+								openWeatherService.getCity(municipio.getNome()).getMain().getTemp()),
+						LocalDateTime.now())));
+	}
 
-    @Transactional
-    public MunicipioEntity cadastrarMunicipio(MunicipioData municipioData) {
+	@Transactional
+	public MunicipioEntity cadastrarMunicipio(MunicipioData municipioData) {
 
-	MunicipioEntity municipio = new MunicipioEntity();
-	municipio.setHoraAtual(municipioData.getHoraAtual());
-	municipio.setNome(municipioData.getNome());
-	municipio.setSigla(municipioData.getSigla());
-	municipio.setTemperatura(municipioData.getTemperatura());
-	municipio.persist();
+		MunicipioEntity municipio = new MunicipioEntity();
+		municipio.setHoraAtual(municipioData.getHoraAtual());
+		municipio.setNome(municipioData.getNome());
+		municipio.setSigla(municipioData.getSigla());
+		municipio.setTemperatura(municipioData.getTemperatura());
+		municipio.persist();
 
-	return municipio;
-    }
+		return municipio;
+	}
 
-    @Transactional
-    public MunicipioEntity buscarMunicipioPorUUID(UUID uuid) {
-	return MunicipioEntity.find("uuid", uuid).firstResult();
-    }
+	@Transactional
+	public MunicipioEntity buscarMunicipioPorUUID(UUID uuid) {
+		return MunicipioEntity.find("uuid", uuid).firstResult();
+	}
 
-    @Transactional
-    public void deletarMunicipioPorUUID(UUID uuid) {
-	MunicipioEntity.delete("uuid", uuid);
-    }
+	@Transactional
+	public void deletarMunicipioPorUUID(UUID uuid) {
+		MunicipioEntity.delete("uuid", uuid);
+	}
 
 }

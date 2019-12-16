@@ -17,30 +17,32 @@ public class OpenWeatherService {
     @RestClient
     public OpenWeatherHttpClient openWeatherHttpClient;
 
-    private OpenWeatherResource getCity(String lat, String lon) {
-        return openWeatherHttpClient.getCityByLatAndLon(lat, lon, token);
+    public OpenWeatherResource getCity(String... args) {
+
+	if (args.length <= 0)
+	    throw new RuntimeException("É Obrigatorio passar um ou mais valores no parametro!");
+	else if (args.length == 1) {
+	    return openWeatherHttpClient.getByName(args[0], token);
+	}
+
+	return openWeatherHttpClient.getCityByLatAndLon(args[0], args[1], token);
 
     }
 
-    public OpenWeatherResource getCityByName(String name) {
-        return openWeatherHttpClient.getByName(name, token);
+    public Recommendation suggestRecommendation(String... params) {
+
+	Climate recommendation = Climate.getClimate(getCity(params).getMain().getTemp());
+
+	return new Recommendation(captureCityName(params), Climate.convertKelvinToCelsius(captureTemperature(params)),
+		recommendation.getDrink(), recommendation.getEntertainment());
     }
 
-    public Recommendation suggestRecommendation(String lat, String lon) {
-
-        Climate recommendation = Climate.getClimate(getCity(lat, lon).getMain().getTemp());
-
-        return new Recommendation(captureCityName(lat, lon),
-                Climate.convertKelvinToCelsius(captureTemperature(lat, lon)), recommendation.getDrink(),
-                recommendation.getEntertainment());
+    private Double captureTemperature(String... params) {
+	return getCity(params).getMain().getTemp();
     }
 
-    private Double captureTemperature(String lat, String lon) {
-        return getCity(lat, lon).getMain().getTemp();
-    }
-
-    private String captureCityName(String lat, String lon) {
-        return getCity(lat, lon).getName();
+    private String captureCityName(String... params) {
+	return getCity(params).getName();
     }
 
 }
